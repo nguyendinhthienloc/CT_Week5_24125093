@@ -6,34 +6,50 @@ Prerequisites
 - Python 3.8+ installed and available as `python` in PATH.
 - Internet access (for installing packages and for translation fallbacks).
 
-1) Start the backend (recommended: use provided helper)
+1) Start the backend
 
-- The backend helper script will create a virtual environment (if missing), install dependencies, and run the Flask app.
+Two helper scripts are provided: Windows PowerShell (`backend/run_backend.ps1`) and POSIX shell (`backend/run_backend.sh`). Both create a `.venv`, install dependencies, and run the Flask app.
 
-Open PowerShell and run:
+Windows (PowerShell)
 
 ```powershell
 cd 'D:\Github Projects\CT_Website\backend'
 .\run_backend.ps1
 ```
 
-- The script will install packages into `.venv` and start the translation backend.
-- The backend listens on `http://localhost:5001/` (health) and `http://localhost:5001/translate` (POST API).
+POSIX (Linux / macOS / Codespaces terminal)
 
-Health check (in a browser or curl / PowerShell):
+```bash
+cd /workspaces/CT_Website/backend    # adjust path inside Codespaces or your workspace
+chmod +x ./run_backend.sh
+./run_backend.sh
+```
 
-```powershell
-# should return JSON {"status":"ok","message":"Translation backend running"}
+Notes
+- The helpers create a virtual environment at `backend/.venv` and install the packages from `backend/requirements.txt`.
+- The backend runs on `http://0.0.0.0:5001/` (health) and `http://0.0.0.0:5001/translate` (POST API).
+
+Health check (curl / PowerShell)
+
+```bash
+# curl example
+curl http://localhost:5001/
+
+# PowerShell example
 Invoke-RestMethod -Uri http://localhost:5001/ -Method GET
 ```
 
-Quick server-side test (PowerShell):
+Quick server-side test (curl / PowerShell):
+
+```bash
+curl -s -X POST http://localhost:5001/translate -H 'Content-Type: application/json' -d '{"text":"Hello"}'
+```
 
 ```powershell
 Invoke-RestMethod -Uri http://localhost:5001/translate -Method POST -Body (ConvertTo-Json @{ text = 'Hello' }) -ContentType 'application/json'
 ```
 
-- Successful response will be JSON containing `translated` text. The backend first attempts `googletrans` and automatically falls back to LibreTranslate if googletrans fails.
+Successful response will be JSON containing `translated` text. The backend first attempts `googletrans` and then falls back to public endpoints if needed.
 
 2) Serve the frontend (simple static server)
 

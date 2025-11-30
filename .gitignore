@@ -1,3 +1,24 @@
+# Virtual environments
+.venv/
+backend/.venv/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# Environment files
+.env
+.venv
+
+# IDE / Editor
+.vscode/
+.idea/
 # Python artifacts
 __pycache__/
 *.py[cod]
